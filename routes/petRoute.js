@@ -1,4 +1,7 @@
 const express = require("express");
+const multer = require("multer");
+const upload = multer({ dest: "../petData" });
+
 const router = express.Router();
 const {
   addPet,
@@ -8,7 +11,7 @@ const {
   deletePet,
 } = require("../controllers/petController");
 
-router.post("/", addPet);
+router.post("/", upload.single("uploadedFile"), addPet);
 
 router.get("/", getAllPets);
 
