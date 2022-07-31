@@ -5,19 +5,19 @@ const petSchema = new Schema(
   {
     name: {
       type: String,
-      required: ture,
+      required: true,
     },
     type: {
       type: String,
-      required: ture,
+      required: true,
     },
     breed: {
       type: String,
-      required: ture,
+      required: true,
     },
     age: {
       type: Number,
-      required: ture,
+      required: true,
     },
   },
   { timestamps: true }

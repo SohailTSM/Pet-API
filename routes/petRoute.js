@@ -1,7 +1,16 @@
 const express = require("express");
+const path = require("path");
 const multer = require("multer");
-const upload = multer({ dest: "../petData" });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../petData"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + ".xlsx");
+  },
+});
 
+const upload = multer({ storage: storage });
 const router = express.Router();
 const {
   addPet,
