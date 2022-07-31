@@ -29,14 +29,17 @@ module.exports.addPet = (req, res) => {
         console.log(err);
       });
   });
-  fs.de;
   if (!error) res.json({ message: "Data Inserted" });
   if (error) res.json({ message: "Please enter a valid file" });
 };
 
-module.exports.getAllPets = (req, res) => {};
+module.exports.getAllPets = (req, res) => {
+  Pet.find().then((pets) => res.json({ pets, message: "All pets" }));
+};
 
-module.exports.getPet = (req, res) => {};
+module.exports.getPet = (req, res) => {
+    
+};
 
 module.exports.updatePet = (req, res) => {};
 
