@@ -1,7 +1,7 @@
-const xlsx = require("xlsx");
-const path = require("path");
-const fs = require("fs");
-const Pet = require("../models/Pet");
+const xlsx = require('xlsx');
+const path = require('path');
+const fs = require('fs');
+const Pet = require('../models/Pet');
 
 module.exports.addPet = (req, res) => {
   let pets = [];
@@ -9,7 +9,7 @@ module.exports.addPet = (req, res) => {
   // Working with excel file
   try {
     const workbook = xlsx.readFile(
-      path.join(__dirname, "../petData/uploadedFile.xlsx")
+      path.join(__dirname, '../petData/uploadedFile.xlsx')
     );
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const worksheetLength = (Object.keys(worksheet).length - 2) / 4;
@@ -26,7 +26,7 @@ module.exports.addPet = (req, res) => {
 
   // Deleting UploadedFile
   try {
-    fs.unlinkSync(path.join(__dirname, "../petData/uploadedFile.xlsx"));
+    fs.unlinkSync(path.join(__dirname, '../petData/uploadedFile.xlsx'));
   } catch (err) {}
   // Saving pets to db
   pets.forEach((pet) => {
@@ -38,21 +38,36 @@ module.exports.addPet = (req, res) => {
         console.log(err);
       });
   });
-  if (!error) res.json({ message: "Data Inserted" });
-  if (error) res.json({ message: "Please enter a valid file" });
+  if (!error) res.json({ message: 'Data Inserted' });
+  if (error) res.json({ message: 'Please enter a valid file' });
 };
 
 module.exports.getAllPets = (req, res) => {
-  Pet.find().then((pets) => res.json({ pets, message: "All pets" }));
+  Pet.find().then((pets) => res.json({ pets, message: 'All pets' }));
 };
 
 module.exports.getPet = (req, res) => {
   Pet.findById(req.params.pet_id, (err, pet) => {
-    if (pet) res.json({ pet, message: "Get pet" });
-    if (err) res.json({ message: "No such pet" });
+    if (pet) res.json({ pet, message: 'Get pet' });
+    if (!pet || err) res.json({ message: 'No such pet' });
   });
 };
 
-module.exports.updatePet = (req, res) => {};
+module.exports.updatePet = (req, res) => {
+  Pet.findByIdAndUpdate(
+    req.params.pet_id,
+    req.body,
+    { new: true },
+    (err, pet) => {
+      if (pet) res.json({ pet, message: 'updated pet' });
+      if (!pet || err) res.json({ message: 'No such pet' });
+    }
+  );
+};
 
-module.exports.deletePet = (req, res) => {};
+module.exports.deletePet = (req, res) => {
+  Pet.findByIdAndDelete(req.params.pet_id, (err, pet) => {
+    if (pet) res.json({ pet, message: 'Deleted pet' });
+    if (!pet || err) res.json({ message: 'No such pet' });
+  });
+};
